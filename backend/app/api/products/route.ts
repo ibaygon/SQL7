@@ -1,4 +1,11 @@
 import { db } from "@/lib/db";
+import { NextResponse } from "next/server";
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
 
 export async function GET() {
   const rows = await db`
@@ -6,7 +13,11 @@ export async function GET() {
     FROM products p
     INNER JOIN categories c ON p.category_id = c.id
   `;
-  return Response.json(rows);
+
+  return new NextResponse(JSON.stringify(rows), {
+    status: 200,
+    headers: corsHeaders,
+  });
 }
 
 export async function POST(req: Request) {
@@ -18,5 +29,15 @@ export async function POST(req: Request) {
     VALUES (${name}, ${price}, ${stock}, ${category_id})
   `;
 
-  return Response.json({ ok: true });
+  return new NextResponse(JSON.stringify({ ok: true }), {
+    status: 200,
+    headers: corsHeaders,
+  });
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: corsHeaders,
+  });
 }
