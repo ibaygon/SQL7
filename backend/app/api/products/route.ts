@@ -13,11 +13,7 @@ export async function GET() {
     FROM products p
     INNER JOIN categories c ON p.category_id = c.id
   `;
-
-  return new NextResponse(JSON.stringify(rows), {
-    status: 200,
-    headers: corsHeaders,
-  });
+  return NextResponse.json(rows, { headers: corsHeaders });
 }
 
 export async function POST(req: Request) {
@@ -28,16 +24,9 @@ export async function POST(req: Request) {
     INSERT INTO products (name, price, stock, category_id)
     VALUES (${name}, ${price}, ${stock}, ${category_id})
   `;
-
-  return new NextResponse(JSON.stringify({ ok: true }), {
-    status: 200,
-    headers: corsHeaders,
-  });
+  return NextResponse.json({ ok: true }, { headers: corsHeaders });
 }
 
 export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: corsHeaders,
-  });
+  return NextResponse.json({}, { headers: corsHeaders });
 }
