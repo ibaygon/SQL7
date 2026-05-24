@@ -16,7 +16,11 @@ export async function GET() {
     `;
     return NextResponse.json(products);
   } catch (error) {
-    return NextResponse.json({ error: 'Error al obtener productos' }, { status: 500 });
+    console.error(error);
+    return NextResponse.json(
+      { error: 'Error al obtener productos' },
+      { status: 500 }
+    );
   }
 }
 
@@ -25,15 +29,25 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, price, stock, category_id } = body;
 
-    // Consulta parametrizada — previene SQL injection
+    if (!name || !price || !category_id) {
+      return NextResponse.json(
+        { error: 'Faltan campos obligatorios' },
+        { status: 400 }
+      );
+    }
+
     const result = await sql`
       INSERT INTO products (name, price, stock, category_id)
-      VALUES (${name}, ${price}, ${stock}, ${category_id})
+      VALUES (${name}, ${price}, ${stock ?? 0}, ${category_id})
       RETURNING *
     `;
 
     return NextResponse.json(result[0], { status: 201 });
   } catch (error) {
-    return NextResponse.json({ error: 'Error al crear producto' }, { status: 500 });
+    console.error(error);
+    return NextResponse.json(
+      { error: 'Error al crear producto' },
+      { status: 500 }
+    );
   }
 }
