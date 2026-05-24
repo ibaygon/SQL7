@@ -9,13 +9,13 @@ automáticamente: es imposible insertar un producto con una categoría que no ex
 
 ## ON DELETE CASCADE vs ON DELETE RESTRICT
 
-Hemos elegido **ON DELETE RESTRICT** porque es el comportamiento más seguro en
+Hemos elegido ON DELETE RESTRICT porque es el comportamiento más seguro en
 un sistema de inventario.
 
-- **ON DELETE RESTRICT**: impide borrar una categoría si tiene productos asociados.
+- ON DELETE RESTRICT: impide borrar una categoría si tiene productos asociados.
   Obliga al desarrollador a gestionar los productos primero. Evita pérdidas de datos accidentales.
 
-- **ON DELETE CASCADE**: borraría automáticamente todos los productos de esa categoría
+- ON DELETE CASCADE: borraría automáticamente todos los productos de esa categoría
   al eliminar la categoría. Peligroso en producción: un error eliminaría datos reales
   de forma irreversible.
 
