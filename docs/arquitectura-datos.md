@@ -1,14 +1,23 @@
-# Arquitectura de Datos
+# Arquitectura de datos
 
-## Foreign Key: category_id
-El campo `category_id` en la tabla `products` es una clave foránea que garantiza que cada producto pertenece a una categoría válida.
+## ¿Qué significa que `category_id` sea una foreign key?
 
-Esto asegura integridad referencial: no puede existir un producto con una categoría inexistente.
+Una foreign key (clave foránea) es una columna que establece un vínculo entre
+dos tablas. En nuestro caso, `products.category_id` debe contener un valor que
+exista en `categories.id`. El motor de base de datos garantiza esta restricción
+automáticamente: es imposible insertar un producto con una categoría que no existe.
 
-## ¿Qué pasa si borramos una categoría con productos asociados?
+## ON DELETE CASCADE vs ON DELETE RESTRICT
 
-- **ON DELETE CASCADE** → elimina también los productos asociados.
-- **ON DELETE RESTRICT** → impide borrar la categoría si tiene productos.
+Hemos elegido **ON DELETE RESTRICT** porque es el comportamiento más seguro en
+un sistema de inventario.
 
-### Opción más segura
-**ON DELETE RESTRICT**, porque evita eliminar datos accidentalmente.
+- **ON DELETE RESTRICT**: impide borrar una categoría si tiene productos asociados.
+  Obliga al desarrollador a gestionar los productos primero. Evita pérdidas de datos accidentales.
+
+- **ON DELETE CASCADE**: borraría automáticamente todos los productos de esa categoría
+  al eliminar la categoría. Peligroso en producción: un error eliminaría datos reales
+  de forma irreversible.
+
+En un e-commerce, perder todos los productos de "Electrónica" por un DELETE
+accidental sería un desastre. RESTRICT nos fuerza a ser explícitos.

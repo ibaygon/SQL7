@@ -10,5 +10,6 @@ Mostrar productos que sí tienen categoría asignada.
 Devuelve todas las filas de la tabla izquierda, aunque no tengan coincidencia.
 
 Ejemplo real:
-Mostrar todas las categorías aunque no tengan productos.
+obtener todas las categorías, incluso las que no tienen
+productos aún. Útil para un panel de administración que muestre categorías vacías.
 
