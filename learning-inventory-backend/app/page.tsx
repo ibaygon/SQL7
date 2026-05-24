@@ -31,37 +31,96 @@ export default function Home() {
       });
   }, []);
 
-  if (loading) return <p style={{ padding: '2rem' }}>Cargando productos...</p>;
-  if (error) return <p style={{ padding: '2rem', color: 'red' }}>Error: {error}</p>;
+  const getStockStyle = (stock: number) => {
+    if (stock > 10) return { badge: 'bg-green-950 text-green-400', label: `${stock} uds` };
+    if (stock > 0)  return { badge: 'bg-yellow-950 text-yellow-400', label: `${stock} uds` };
+    return { badge: 'bg-red-950 text-red-400', label: '0 uds' };
+  };
 
   return (
-    <main style={{ padding: '2rem', fontFamily: 'sans-serif' }}>
-      <h1>Inventario de Productos</h1>
-      <p>{products.length} productos encontrados</p>
-      <table
-        border={1}
-        cellPadding={10}
-        style={{ borderCollapse: 'collapse', width: '100%', marginTop: '1rem' }}
-      >
-        <thead style={{ backgroundColor: '#f0f0f0' }}>
-          <tr>
-            <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Categoría</th>
-          </tr>
-        </thead>
-        <tbody>
-          {products.map(p => (
-            <tr key={p.id}>
-              <td>{p.name}</td>
-              <td>{Number(p.price).toFixed(2)} €</td>
-              <td>{p.stock}</td>
-              <td>{p.category}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <main className="min-h-screen bg-[#0f0f0f] font-serif">
+
+      {/* Header */}
+      <div className="border-b border-[#2a2a2a] px-12 py-8 flex items-baseline gap-4">
+        <h1 className="text-[#f5f0e8] text-2xl font-normal tracking-widest uppercase">
+          Inventario
+        </h1>
+        <span className="text-[#555] text-sm tracking-wider">
+          Sistema de gestión
+        </span>
+      </div>
+
+      <div className="px-12 py-10">
+
+        {loading && (
+          <p className="text-[#666] tracking-widest text-xs uppercase">
+            Cargando...
+          </p>
+        )}
+
+        {error && (
+          <p className="text-red-400 bg-[#1a0f0f] border border-[#3a1a1a] px-6 py-4 text-sm">
+            Error: {error}
+          </p>
+        )}
+
+        {!loading && !error && (
+          <>
+            {/* Contador */}
+            <div className="flex items-center gap-3 mb-8">
+              <span className="bg-[#c9a84c] text-[#0f0f0f] text-xs font-bold px-2 py-1 tracking-wider">
+                {products.length}
+              </span>
+              <span className="text-[#666] text-xs tracking-widest uppercase">
+                productos
+              </span>
+            </div>
+
+            {/* Cabecera */}
+            <div className="grid grid-cols-[2fr_1fr_1fr_1fr] px-5 pb-3 border-b border-[#2a2a2a] mb-1">
+              {['Producto', 'Categoría', 'Precio', 'Stock'].map(h => (
+                <span
+                  key={h}
+                  className="text-[#c9a84c] text-[0.65rem] tracking-[0.15em] uppercase font-mono"
+                >
+                  {h}
+                </span>
+              ))}
+            </div>
+
+            {/* Filas */}
+            {products.map((p, i) => {
+              const stock = getStockStyle(p.stock);
+              return (
+                <div
+                  key={p.id}
+                  className={`
+                    grid grid-cols-[2fr_1fr_1fr_1fr] px-5 py-4
+                    border-b border-[#1a1a1a]
+                    hover:bg-[#1e1e1e] transition-colors duration-150
+                    ${i % 2 !== 0 ? 'bg-[#141414]' : 'bg-transparent'}
+                  `}
+                >
+                  <span className="text-[#f5f0e8] text-sm self-center">
+                    {p.name}
+                  </span>
+                  <span className="text-[#888] text-xs tracking-wider self-center">
+                    {p.category}
+                  </span>
+                  <span className="text-[#c9a84c] text-sm font-mono self-center">
+                    {Number(p.price).toFixed(2)} €
+                  </span>
+                  <div className="self-center">
+                    <span className={`text-xs font-mono px-2 py-1 tracking-wider ${stock.badge}`}>
+                      {stock.label}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </>
+        )}
+      </div>
     </main>
   );
 }
