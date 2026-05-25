@@ -7,7 +7,7 @@ SQL avanzadas, endpoints REST seguros y despliegue en producción.
 
 | Despliegue | URL |
 |------------|-----|
-| Frontend   | https://learning-inventory-xxx.vercel.app |
+| Frontend   | https://sql-7-cny14tqwz-ibaygons-projects.vercel.app/ |
 
 ---
 
